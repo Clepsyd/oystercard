@@ -1,7 +1,9 @@
 require 'oystercard'
 
 describe Oystercard do
-  it { is_expected.to respond_to :balance }
+  it { is_expected.to respond_to(:balance, :entry_station) }
+
+  let(:station) { double("station")}
 
   describe "#top_up" do
     it "raises the balance by a certain amount" do
@@ -27,19 +29,25 @@ describe Oystercard do
 
     it "sets in_use to true" do
       subject.top_up(Oystercard::MINIMUM_BALANCE)
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject).to be_in_journey
     end
 
     it "raises an error unless there's at least £1 on the card" do
-      expect{ subject.touch_in }.to raise_error "Insufficient funds to travel!"
+      expect{ subject.touch_in(station) }.to raise_error "Insufficient funds to travel!"
+    end
+
+    it "records the entry station when touching in" do
+      subject.top_up(Oystercard::MINIMUM_BALANCE)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
     end
   end
 
   describe "#touch_out" do
     it "sets in_use to false" do
       subject.top_up(Oystercard::MINIMUM_BALANCE)
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
       expect(subject).not_to be_in_journey
     end
@@ -48,4 +56,5 @@ describe Oystercard do
       expect { subject.touch_out }.to change(subject, :balance).by(-Oystercard::FARE_AMOUNT)
     end
   end
+
 end
