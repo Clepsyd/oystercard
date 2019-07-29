@@ -13,15 +13,7 @@ describe Oystercard do
     it "raises an error when limit is exceeded" do
       maximum_balance = Oystercard::MAXIMUM_BALANCE
       expect{ subject.top_up(maximum_balance + 1) }.to raise_error "Limit is £90"
-    end
-  end
-
-  describe "#deduct" do
-    it "deducts the fare amount from balance when card is used" do
-      balance = subject.balance
-      subject.deduct(10)
-      expect(subject.balance).to eq balance - 10
-    end
+    end  
   end
 
   describe "#in_journey?" do
@@ -50,6 +42,10 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
+    end
+
+    it "reduces the balance by journey fare" do
+      expect { subject.touch_out }.to change(subject, :balance).by(-Oystercard::FARE_AMOUNT)
     end
   end
 end
