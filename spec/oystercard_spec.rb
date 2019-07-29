@@ -40,6 +40,7 @@ describe Oystercard do
 
   describe "#touch_out" do
     it "sets in_use to false" do
+      subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
     end
