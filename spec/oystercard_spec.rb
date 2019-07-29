@@ -23,4 +23,11 @@ describe Oystercard do
       expect(subject.balance).to eq balance - 10
     end
   end
+
+  describe "#in_journey?" do
+    it "returns false when the card is not in use" do
+      card = Oystercard.new
+      expect(card).not_to be_in_journey
+    end
+  end
 end
