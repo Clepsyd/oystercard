@@ -30,4 +30,18 @@ describe Oystercard do
       expect(card).not_to be_in_journey
     end
   end
+
+  describe "#touch_in" do
+    it "sets in_use to true" do
+      subject.touch_in
+      expect(subject).to be_in_journey
+    end
+  end
+
+  describe "#touch_out" do
+    it "sets in_use to false" do
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end
+  end
 end
