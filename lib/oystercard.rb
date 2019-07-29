@@ -8,7 +8,6 @@ FARE_AMOUNT = 1
 
   def initialize
     @balance = 0
-    @in_use = false
   end
 
   def top_up(amount)
@@ -17,18 +16,17 @@ FARE_AMOUNT = 1
   end
 
   def in_journey?
-    @in_use
+    @entry_station != nil
   end
 
   def touch_in(station)
     raise "Insufficient funds to travel!" if @balance < MINIMUM_BALANCE
-    @in_use = true
     @entry_station = station
   end
 
   def touch_out
-    @in_use = false
     deduct(FARE_AMOUNT)
+    @entry_station = nil
   end
 
   private

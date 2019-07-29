@@ -55,6 +55,13 @@ describe Oystercard do
     it "reduces the balance by journey fare" do
       expect { subject.touch_out }.to change(subject, :balance).by(-Oystercard::FARE_AMOUNT)
     end
+
+    it "resets the value of #entry_station to nil" do
+      subject.top_up(Oystercard::MINIMUM_BALANCE)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
+    end
   end
 
 end
