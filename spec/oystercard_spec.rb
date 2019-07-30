@@ -60,11 +60,6 @@ describe Oystercard do
         subject.top_up(-Oystercard::MINIMUM_BALANCE)
         expect{ subject.touch_in(entry_station) }.to raise_error "Insufficient funds to travel!"
       end
-  
-      it "records the entry station when touching in" do
-        subject.touch_in(entry_station)
-        expect(subject.entry_station).to eq entry_station
-      end
 
     end
 
@@ -75,12 +70,8 @@ describe Oystercard do
         expect { subject.touch_out(exit_station) }.to change(subject, :balance).by(-Oystercard::FARE_AMOUNT)
       end
   
-      it "resets the value of #entry_station to nil" do
-        expect(subject.entry_station).to eq nil
-      end
-  
-      it "returns the station where touched out" do
-        expect(subject.exit_station).to eq exit_station
+      it "sets current journey to nil" do
+        expect(subject.current_journey).to eq nil
       end
   
     end
