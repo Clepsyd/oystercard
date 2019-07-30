@@ -1,9 +1,10 @@
 require 'oystercard'
 
 describe Oystercard do
-
   let(:entry_station) { double("entry station")}
   let(:exit_station) { double("exit station")}
+  let(:journey) {{entry_station: entry_station, exit_station: exit_station}}
+
 
   describe "#top_up" do
     it "raises the balance by a certain amount" do
@@ -15,7 +16,7 @@ describe Oystercard do
     it "raises an error when limit is exceeded" do
       maximum_balance = Oystercard::MAXIMUM_BALANCE
       expect{ subject.top_up(maximum_balance + 1) }.to raise_error "Limit is £90"
-    end  
+    end
   end
 
   describe "#in_journey?" do
@@ -68,6 +69,16 @@ describe Oystercard do
       subject.touch_in(entry_station)
       subject.touch_out(exit_station)
       expect(subject.exit_station).to eq exit_station
+    end
+
+  end
+
+  describe '#journey_history' do
+    it 'gives the user its joyrney history' do
+      subject.top_up(Oystercard::MINIMUM_BALANCE)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journey_history).to include journey
     end
   end
 
